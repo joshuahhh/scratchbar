@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>scratchbar</title>
+    <script src="js/jquery.js"></script>
+    <script src="js/Audiolet.js"></script>
+    <script src="js/Looper.js"></script>
+    <style>
+      body {
+        height: 1000px;
+        margin: 0px;
+        padding: 0px;
+      }
+
+      canvas {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0px;
+      }
+
+      #menu, #unfold {
+        position: fixed;
+        right: 0px;
+        bottom: 0px;
+        text-align: right;
+      }
+      
+      #menu #unfold {
+        visibility: hidden;
+      }
+
+      #menu:hover #unfold {
+        visibility: visible;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="js/app.js"></script>
+    <canvas width="200" height="1000"></canvas>
+    <div id="menu">
+      <div id="unfold">
+	scratchbar (by <a href="http://web.mit.edu/joshuah/www">J</a>) <br/>
+	audio: <a href="#" class="audio">nobody</a> <a href="#" class="audio">comeout</a> <a href="#" class="audio">rain</a> <a href="#" class="audio">amen</a> <a href="#" class="audio">woof</a> <br/>
+	<i>hint: resize your browser &#x2195; vertically</i> &#x2b24;
+      </div>
+      &#x2b24;
+    </div>
+  </body>
+</html>
