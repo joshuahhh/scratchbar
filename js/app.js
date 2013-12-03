@@ -1,48 +1,58 @@
-$(function() {
-    this.audiolet = new Audiolet();
-    this.looper = new Looper(this.audiolet);
-    this.looper.connect(this.audiolet.output.upMixer);
+/*jshint globalstrict: true*/
+/*global $, Audiolet, Looper, AudioletBuffer, BufferPlayer, TriggerControl*/
 
-    this.audio = new AudioletBuffer(1, 0);
+"use strict";
 
-    var loadFile = function(name) {
-	this.audio.load(name, false);
-	var data = this.audio.getChannelData(0);
-	var ctx = $("canvas").get(0).getContext("2d");
-	ctx.clearRect(0 , 0, $("canvas").width(), $("canvas").height());
-	ctx.beginPath();
-	ctx.moveTo(100,0);
-	for (var i = 0; i < $("body").height(); i += 0.25) {
-	    var sample = data[Math.round(i/$("body").height() * this.audio.length)];
-	    ctx.lineTo(100+100*sample, i);
-	}
-	ctx.stroke();
-    }.bind(this);
+$(function () {
+    var start;
 
-    loadFile("audio/nobody.wav");
+    var audiolet = new Audiolet();
+    var looper = new Looper(audiolet);
+    looper.connect(audiolet.output.upMixer);
 
-    this.player = new BufferPlayer(this.audiolet, this.audio, 1, 0, 1);
-    this.restartTrigger = new TriggerControl(this.audiolet);
+    var audio = new AudioletBuffer(1, 0);
 
-    this.restartTrigger.connect(this.player, 0, 1)
-    this.player.connect(this.audiolet.output);
+    var loadFile = function (name) {
 
-    var func = function(event) {
-	start = $(window).scrollTop() / $("body").height() * this.audio.length;
-	length = $(window).height() / $("body").height() * this.audio.length;
-	this.start = start;
-	this.looper.beatLength = Math.min(length, this.audio.length);
-    }
-    $(window).scroll(func.bind(this)).resize(func.bind(this))
-    func.bind(this)()
+        audio.load(name, false);
+        var data = audio.getChannelData(0);
+        setLoop();
 
-    this.looper.play(function () {
-	this.player.startPosition.setValue(this.start);
-	this.restartTrigger.trigger.setValue(1);
-	}.bind(this)
-    );
+        var ctx = $("canvas").get(0).getContext("2d");
+        ctx.clearRect(0, 0, $("canvas").width(), $("canvas").height());
+        ctx.beginPath();
+        ctx.moveTo(100, 0);
+        for (var i = 0; i < $("body").height(); i += 0.25) {
+            var sample = data[Math.round(i / $("body").height() * audio.length)];
+            ctx.lineTo(100 + 100 * sample, i);
+        }
+        ctx.stroke();
+    };
+
+    var player = new BufferPlayer(audiolet, audio, 1, 0, 1);
+    var restartTrigger = new TriggerControl(audiolet);
+
+    restartTrigger.connect(player, 0, 1);
+    player.connect(audiolet.output);
+
+    var setLoop = function () {
+        start = $(window).scrollTop() / $("body").height() * audio.length;
+        var length = $(window).height() / $("body").height() * audio.length;
+        looper.beatLength = Math.min(length, audio.length);
+    };
+    $(window).scroll(setLoop).resize(setLoop);
+    setLoop();
+
+    looper.play(function () {
+        player.startPosition.setValue(start);
+        restartTrigger.trigger.setValue(1);
+    });
 
     $("a.audio").click(function () {
-	loadFile("audio/" + $(this).text() + ".wav");
-    })
-})
+        loadFile("audio/" + $(this).text() + ".wav");
+    });
+
+
+
+    loadFile("audio/nobody.wav");
+});
