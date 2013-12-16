@@ -12,9 +12,8 @@ $(function () {
 
     var audio = new AudioletBuffer(1, 0);
 
-    var loadFile = function (name) {
-
-        audio.load(name, false);
+    var loadSample = function (name) {
+        audio.load("audio/" + name + ".wav", false);
         var data = audio.getChannelData(0);
         setLoop();
 
@@ -27,6 +26,8 @@ $(function () {
             ctx.lineTo(100 + 100 * sample, i);
         }
         ctx.stroke();
+
+        window.location.hash = '#' + name;
     };
 
     var player = new BufferPlayer(audiolet, audio, 1, 0, 1);
@@ -48,11 +49,11 @@ $(function () {
         restartTrigger.trigger.setValue(1);
     });
 
-    $("a.audio").click(function () {
-        loadFile("audio/" + $(this).text() + ".wav");
+    $("a.audio").click(function (e) {
+        e.preventDefault();
+        loadSample($(this).text());
     });
 
-
-
-    loadFile("audio/nobody.wav");
+    var name = window.location.hash.substring(1);
+    loadSample(name ? name : "nobody");
 });
