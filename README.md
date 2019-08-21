@@ -8,6 +8,3 @@ scratchbar lets you loop bits of audio, using the browser window as an (unapolog
 ## Technical details
 
 [Audiolet](https://github.com/oampo/Audiolet) made realtime audio synthesis easy. Thanks Audiolet!
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/joshuahhh/scratchbar/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
